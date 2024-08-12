@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/styles/style.css">
+    <title>Budget Tracker</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <section class="header">
+        <form method="POST" class="inputForm">
+          <input type="number" name="day" placeholder="Day...">
+          <select name="type" style="margin-left: 1vw">
+            <option value="spent">Spent</option>
+            <option value="gained">Gained</option>
+            <option value="transfer">Transfer</option>
+          </select>
+          <input type="number" name="amount" placeholder="Amount..." step=".01" style="margin-left: 1vw">
+          <input type="text" name="notes" placeholder="Notes..." style="margin-left: 1vw">
+          <button type="submit" class="Submit" style="margin-left: 1vw">Submit</button>
+        </form>
+        <form method="POST" style="margin-left: 15vw; margin-top: 4vh;">
+          <input class="dnum" type="number" name="debit" step=".01" placeholder="Amount">
+          <button type="submit" class="dbut">Debit</button>
+        </form>
+        <p style="margin-left: 2vw; margin-top: 4vh;">{{ debit }}</p>
+        <table class="dtable">
+          {% for row in debitList %}
+            <tr>
+              <td>{{ row[1] }}</td>
+              <td><form action"/" method="POST"><button class="X" name="removeDebit" value="{{ row[0] }}">X</button></form></td>
+            </tr>
+          {% endfor %}
+        </table>
+    </section>
+    <section class="body">
+        <table class="purchases">
+          <thead>
+            <tr>
+              <td>Day</td>
+              <td>Spent</td>
+              <td>Notes</td>
+              <td>Delete</td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in purchases %}
+            <tr>
+              <td>{{ row[1] }}</td>
+              <td>{{ row[2] }}</td>
+              <td>{{ row[3] }}</td>
+              <td><form action"/" method="POST"><button class="X" name="removePurchase" value="{{ row[0] }}">X</button></form></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      <table class="payback">
+        <thead>
+          <tr>
+            <td>Day</td>
+            <td>Gained</td>
+            <td>Notes</td>
+            <td>Delete</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in payback %}
+          <tr>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td><form action"/" method="POST"><button class="X" name="removePayback" value="{{ row[0] }}">X</button></form></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <table class="transfer">
+        <thead>
+          <tr>
+            <td>Day</td>
+            <td>Transferred</td>
+            <td>Notes</td>
+            <td>Delete</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in transfer %}
+          <tr>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td><form action"/" method="POST"><button class="X" name="removeTransfer" value="{{ row[0] }}">X</button></form></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <table style="margin-left: 4vw; margin-right: 1vw;" class="results">
+          <thead>
+            <tr>
+              <td>Calculating:</td>
+              <td>Result</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Total Spent S*</td>
+              <td>{{totalSpent}}</td>
+            </tr>
+            <tr>
+              <td>Total Left S*</td>
+              <td>{{totalLeft}}</td>
+            </tr>
+            <tr>
+              <td>Daily Average S*</td>
+              <td>{{average}}</td>
+            </tr>
+            <tr>
+              <td>Future Daily Average S*</td>
+              <td>{{fAverage}}</td>
+            </tr>
+            <tr>
+              <td>Left with at this rate S*</td>
+              <td>{{leftWith}}</td>
+            </tr>
+            <tr>
+              <td>-</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>Total Gained</td>
+              <td>{{totalGained}}</td>
+            </tr>
+            <tr>
+              <td>Total Transferred</td>
+              <td>{{amtTrans}}</td>
+            </tr>
+            <tr>
+              <td>HARD TOTAL SPENT</td>
+              <td>{{hts}}</td>
+            </tr>
+            <tr>
+              <td>HARD TOTAL LEFT</td>
+              <td>{{htl}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </body>
+    <p class="ideas" style="color: white">Places to hold money: Cash, Apple cash, CFA, Visa Card, Amazon, BofA </p>
+    </html>
+    

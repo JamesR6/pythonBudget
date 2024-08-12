@@ -1,0 +1,117 @@
+html{
+    font-family: Arial, Helvetica, sans-serif;
+}
+body{
+    background-color: #000000;
+}
+.header {
+    background: #f0308d;
+    border-color: #fe5aaa;
+    height: 11vh;
+    border-radius: 20px;
+    border-style: solid;
+    display: flex;
+    
+}
+.body {
+    background: #2c3c95;
+    border-color: #3649b9;
+    margin-top: .5%;
+    padding: .3%;
+    height: 83vh;
+    border-radius: 20px;
+    border-style: solid;
+    display: flex;
+}
+
+/* ---------TABLE--------- */ 
+
+.purchases, .payback, .transfer {
+    margin-left: .8vw;
+    margin-top: 2vh;
+    margin-bottom: 1vh;
+    background-color: rgb(0, 0, 0);
+    border-radius: 10px;
+    border-spacing: 0;
+    border: 3px solid #f0308d;
+    display:block;
+    overflow-y: auto;
+    text-wrap:wrap;
+}
+thead{
+    background-color: #fe5aaa;
+}
+tbody{
+    color: white;
+}
+::-webkit-scrollbar{
+    width: 0;
+}
+td, th {
+    text-align: left;
+    padding: 8px;
+}
+tr:nth-child(odd) {
+    background-color: #ff007b53;
+}
+
+/* --------RESULTS------------ */
+
+.results {
+    width: 26vw;
+    height: 30vh;
+    margin-top: 2vh;
+    background-color: rgb(0, 0, 0);
+    border-collapse: separate;
+    border-radius: 10px;
+    border-spacing: 0;
+    border: 3px solid #f0308d;    
+}
+
+
+
+/* ------ */
+
+.inputForm{
+    display: flex;
+    margin-top: 2.6vh;
+    margin-bottom: 2.6vh;
+    margin-left: 2vw;
+}
+
+
+
+
+/* -------FORM-------- */
+input[type=text], input[type=number], .Submit, select, .dbut{
+    border: 3px solid #ff91c6;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+}
+.X{
+    border: 2px solid #fe5aaa;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+}
+
+/* --------DEBIT--------- */
+
+.dnum{
+    width: 5vw;
+}
+.dtable{
+    height: 9vh;
+    margin-left: 2vw;
+    margin-top: 1vh;
+    background-color: rgb(0, 0, 0);
+    border-collapse: separate;
+    border-radius: 10px;
+    border-spacing: 0;
+    border: 3px solid #ff91c6;
+    display:block;
+    overflow-y: auto;
+}
+
+

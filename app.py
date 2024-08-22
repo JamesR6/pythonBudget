@@ -8,7 +8,7 @@ totalSpent=0
 # --------------------------
 @app.route('/', methods=['GET', 'POST'])
 def hello():
-    con = sqlite3.connect("./july.db")
+    con = sqlite3.connect("./august.db")
     cur = con.cursor()
     if request.method == 'POST':
         day = request.form.get('day')
@@ -58,6 +58,7 @@ def hello():
     cur.execute("SELECT COUNT(*) FROM purchases")
     days = round(cur.fetchone()[0])
     if(days==0): days=1
+    if(days>30): days=30
     average = round(totalSpent/days, 2)
     fAverage = round(totalLeft/(31-days), 2)
     leftWith = limit - round(average*31)

@@ -16,13 +16,13 @@
             <option value="gained">Gained</option>
             <option value="transfer">Transfer</option>
           </select>
-          <input type="number" name="amount" placeholder="Amount..." step=".01" style="margin-left: 1vw">
+          <input type="number" name="amount" placeholder="Amount..." step=".01" style="margin-left: 1vw" value=0>
           <input type="text" name="notes" placeholder="Notes..." style="margin-left: 1vw">
           <button type="submit" class="Submit" style="margin-left: 1vw">Submit</button>
         </form>
         <form method="POST" style="margin-left: 15vw; margin-top: 4vh;">
           <input class="dnum" type="number" name="debit" step=".01" placeholder="Amount">
-          <button type="submit" class="dbut">Debit</button>
+          <button type="submit" class="dbut">Cash</button>
         </form>
         <p style="margin-left: 2vw; margin-top: 4vh;">{{ debit }}</p>
         <table class="dtable">

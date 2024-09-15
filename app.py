@@ -74,9 +74,9 @@ def hello():
  
 # DEBIT
     cur.execute("SELECT SUM(amount) FROM debit")
-    if (cur.fetchone()[0] != None):
-        debit=round(cur.fetchone()[0], 2)
-    else:
+    try:
+        debit = cur.fetchone()[0]
+    except:
         debit = 0
 
     # end maths

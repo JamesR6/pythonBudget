@@ -8,7 +8,8 @@ totalSpent=0
 # --------------------------
 @app.route('/', methods=['GET', 'POST'])
 def hello():
-    con = sqlite3.connect("./august.db")
+    filename = "september.db"
+    con = sqlite3.connect(filename)
     cur = con.cursor()
     if request.method == 'POST':
         day = request.form.get('day')
@@ -94,7 +95,7 @@ def hello():
     debitList = cur.fetchall()[::-1]
 
     con.close()
-    return render_template('index.html', purchases=purchases, payback=payback, totalSpent=totalSpent, totalLeft=totalLeft, totalGained=totalGained, average=average, fAverage=fAverage, leftWith=leftWith, debit=debit, debitList=debitList, transfer=transfer, hts=hts, amtTrans=amtTrans, htl=htl)
+    return render_template('index.html', purchases=purchases, payback=payback, totalSpent=totalSpent, totalLeft=totalLeft, totalGained=totalGained, average=average, fAverage=fAverage, leftWith=leftWith, debit=debit, debitList=debitList, transfer=transfer, hts=hts, amtTrans=amtTrans, htl=htl, filename = filename)
 
 
 

@@ -54,6 +54,8 @@ def hello():
         totalGained= round(cur.fetchone()[0], 2)
     except:
         totalGained = 0
+    forHard = totalSpent
+    totalSpent -= totalGained
 
 # AVERAGES
     cur.execute("SELECT COUNT(*) FROM purchases")
@@ -70,7 +72,7 @@ def hello():
         amtTrans = round(cur.fetchone()[0], 2)
     except:
         amtTrans = 0
-    hts = round(totalSpent + amtTrans, 2)
+    hts = round(forHard + amtTrans, 2)
     htl = round(limit-hts, 2)
  
 # DEBIT

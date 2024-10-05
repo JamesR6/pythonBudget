@@ -49,13 +49,13 @@ def hello():
     except:
         totalSpent = 0
     cur.execute("SELECT SUM(amount) FROM payback")
-    totalLeft = round(limit - totalSpent, 2)
     try:
         totalGained= round(cur.fetchone()[0], 2)
     except:
         totalGained = 0
     forHard = totalSpent
     totalSpent -= totalGained
+    totalLeft = round(limit - totalSpent, 2)
 
 # AVERAGES
     cur.execute("SELECT COUNT(*) FROM purchases")

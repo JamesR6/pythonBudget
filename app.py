@@ -8,7 +8,7 @@ totalSpent=0
 # --------------------------
 @app.route('/', methods=['GET', 'POST'])
 def hello():
-    filename = "september.db"
+    filename = "august.db"
     con = sqlite3.connect(filename)
     cur = con.cursor()
     if request.method == 'POST':

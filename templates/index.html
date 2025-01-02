@@ -9,6 +9,8 @@
   <body>
     <div id="app"></div>
     <section class="header">
+
+        <!-- INPUT FORM -->
         <form method="POST" class="inputForm">
           <input type="number" name="day" placeholder="Day...">
           <select name="type" style="margin-left: 1vw">
@@ -24,6 +26,8 @@
           <input class="dnum" type="number" name="debit" step=".01" placeholder="Amount">
           <button type="submit" class="dbut">Cash</button>
         </form>
+
+        <!-- CASH -->
         <p style="margin-left: 2vw; margin-top: 4vh;">{{ debit }}</p>
         <table class="dtable">
           {% for row in debitList %}
@@ -33,7 +37,9 @@
             </tr>
           {% endfor %}
         </table>
-        <p style="margin: 2vw">{{filename}}</p>
+
+
+        <p style="margin: 2.5vw">{{filename}}</p>
     </section>
     <section class="body">
         <table class="purchases">
@@ -56,26 +62,6 @@
             {% endfor %}
           </tbody>
         </table>
-      <table class="payback">
-        <thead>
-          <tr>
-            <td>Day</td>
-            <td>Gained</td>
-            <td>Notes</td>
-            <td>Delete</td>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in payback %}
-          <tr>
-            <td>{{ row[1] }}</td>
-            <td>{{ row[2] }}</td>
-            <td>{{ row[3] }}</td>
-            <td><form action"/" method="POST"><button class="X" name="removePayback" value="{{ row[0] }}">X</button></form></td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
       <table class="transfer">
         <thead>
           <tr>
@@ -105,23 +91,23 @@
           </thead>
           <tbody>
             <tr>
-              <td>Total Spent S*</td>
+              <td>Total Spent</td>
               <td>{{totalSpent}}</td>
             </tr>
             <tr>
-              <td>Total Left S*</td>
+              <td>Total Left</td>
               <td>{{totalLeft}}</td>
             </tr>
             <tr>
-              <td>Daily Average S*</td>
+              <td>Daily Average</td>
               <td>{{average}}</td>
             </tr>
             <tr>
-              <td>Future Daily Average S*</td>
+              <td>Future Daily Average</td>
               <td>{{fAverage}}</td>
             </tr>
             <tr>
-              <td>Left with at this rate S*</td>
+              <td>Left with at this rate</td>
               <td>{{leftWith}}</td>
             </tr>
             <tr>
@@ -137,11 +123,11 @@
               <td>{{amtTrans}}</td>
             </tr>
             <tr>
-              <td>HARD TOTAL SPENT</td>
+              <td>Hard Total Spent</td>
               <td>{{hts}}</td>
             </tr>
             <tr>
-              <td>HARD TOTAL LEFT</td>
+              <td>Hard Total Left</td>
               <td>{{htl}}</td>
             </tr>
           </tbody>

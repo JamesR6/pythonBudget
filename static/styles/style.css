@@ -31,10 +31,12 @@ body{
     display: flex;
 }
 
-/* ---------TABLE--------- */ 
 
-/* Two Main tables */
-.purchases, .transfer {
+
+
+/* ---------TABLES--------- */ 
+
+table {
     margin-left: .8vw;
     margin-top: 2vh;
     margin-bottom: 1vh;
@@ -47,47 +49,41 @@ body{
     text-wrap:wrap;
 }
 
-/* ALL Body table heads */
 thead{
     background-color: #4c1dc8;
+    color: #b3e237;
 }
 
-/* ALL Body table bodies */
 tbody{
     color: #cccccc;
 }
 
-/* ScrollBars */
-::-webkit-scrollbar{
-    width: 0;
-}
-
-/* Controls the inputted rows of ALL Body tables */
 td, th {
     text-align: left;
     padding: 8px;
 }
+
 tr:nth-child(odd) {
     background-color: #4b1dc84d;
 }
 
-/* --------RESULTS------------ */
+::-webkit-scrollbar{
+    width: 0;
+}
 
-
-.results {
-    width: 26vw;
-    height: 30vh;
-    margin-top: 2vh;
-    background-color: rgb(0, 0, 0);
+/* Cash table */
+.dtable{
+    height: 9vh;
+    margin-left: 2vw;
+    margin-top: 1vh;
     border-collapse: separate;
-    border-radius: 10px;
-    border-spacing: 0;
-    border: 3px solid #4c1dc8;    
 }
 
 
 
-/* ------ */
+
+
+/* -------FORM-------- */
 
 .inputForm{
     display: flex;
@@ -96,40 +92,23 @@ tr:nth-child(odd) {
     margin-left: 2vw;
 }
 
-
-
-
-/* -------FORM specifics-------- */
-
-input[type=text], input[type=number], .Submit, select, .dbut{
+input[type=text], input[type=number], .Submit, select, .cashSubmit {
     border: 3px solid #4c1dc8;
     border-radius: 10px;
     background-color: black;
     color: #cccccc;
 }
-.X{
+
+.removeButton{
     border: 2px solid #4c1dc8;
     border-radius: 5px;
     background-color: black;
     color: white;
 }
 
-/* --------DEBIT--------- */
 
-.dnum{
-    width: 5vw;
-}
-.dtable{
-    height: 9vh;
-    margin-left: 2vw;
-    margin-top: 1vh;
-    background-color: rgb(0, 0, 0);
-    border-collapse: separate;
-    border-radius: 10px;
-    border-spacing: 0;
-    border: 3px solid #3a17ab;
-    display:block;
-    overflow-y: auto;
-}
+
+
+
 
 

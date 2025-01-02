@@ -17,28 +17,26 @@ def hello():
         transactionType = request.form.get('type')
         amount = request.form.get('amount')
         notes = request.form.get('notes')
-        debit = request.form.get('debit')
+        cash = request.form.get('cash')
 
         # Gather data to remove elements
         removePurchase = request.form.get('removePurchase')
         removeTransfer = request.form.get('removeTransfer')
-        removeDebit = request.form.get('removeDebit')
+        removeCash = request.form.get('removeCash')
 
         # Remove elements if requested
         if(removePurchase != None):
             cur.execute("DELETE FROM purchases WHERE id = ?", (removePurchase,))
         if(removeTransfer != None):
             cur.execute("DELETE FROM transfer WHERE id = ?", (removeTransfer,))
-        if(removeDebit != None):
-            cur.execute("DELETE FROM debit WHERE id = ?", (removeDebit,))
+        if(removeCash != None):
+            cur.execute("DELETE FROM cash WHERE id = ?", (removeCash,))
 
         # Add elements if requested
-        if(debit != None):
-            cur.execute("INSERT INTO debit(amount) VALUES (?)", (debit,))
+        if(cash != None):
+            cur.execute("INSERT INTO cash(amount) VALUES (?)", (cash,))
         elif(transactionType == "spent"):
             cur.execute("INSERT INTO purchases(day, amount, notes) VALUES (?,?,?)", [ day, amount, notes])
-        elif(transactionType == "gained"):
-            cur.execute("INSERT INTO payback(day, amount, notes) VALUES (?,?,?)", [ day, amount, notes]) 
         elif(transactionType == "transfer"):
             cur.execute("INSERT INTO transfer(day, amount) VALUES (?,?)", [ day, amount])
 
@@ -86,12 +84,12 @@ def hello():
     hardTotalSpent = round(forHard + totalTransferred, 2)
     hardTotalLeft = round(limit - hardTotalSpent, 2)
  
-# DEBIT
-    cur.execute("SELECT SUM(amount) FROM debit")
+# CASH
+    cur.execute("SELECT SUM(amount) FROM cash")
     try:
-        totalDebit = cur.fetchone()[0]
+        totalCash = cur.fetchone()[0]
     except:
-        totalDebit = 0
+        totalCash = 0
 
 
 # Gather actual table rows from database
@@ -101,8 +99,8 @@ def hello():
     cur.execute("SELECT * FROM transfer")
     transferRows = cur.fetchall()
 
-    cur.execute("SELECT * FROM debit")
-    debitRows = cur.fetchall()[::-1]
+    cur.execute("SELECT * FROM cash")
+    cashRows = cur.fetchall()[::-1]
 
 # Close database
     con.close()
@@ -111,17 +109,17 @@ def hello():
     return render_template('index.html', 
     filename = filename,
     totalSpent = totalSpent, 
-    amtTrans = totalTransferred, 
-    debit = totalDebit, 
+    totalTransferred = totalTransferred, 
+    totalCash = totalCash, 
     totalLeft = totalLeft, 
-    hts = hardTotalSpent, 
-    htl = hardTotalLeft, 
-    average = dailyAverage, 
-    fAverage = futureAverage, 
+    hardTotalSpent = hardTotalSpent, 
+    hardTotalLeft = hardTotalLeft, 
+    dailyAverage = dailyAverage, 
+    futureAverage = futureAverage, 
     leftWith=  leftWith, 
-    purchases = purchaseRows, 
-    transfer = transferRows, 
-    debitList = debitRows)
+    purchaseRows = purchaseRows, 
+    transferRows = transferRows, 
+    cashRows = cashRows)
 
 
 

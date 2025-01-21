@@ -7,9 +7,15 @@ app = Flask(__name__)
 def hello():
 
     # Initiate database
-    filename = "./months/january.db"
-    con = sqlite3.connect(filename)
+    path = "./months/january.db"
+    con = sqlite3.connect(path)
     cur = con.cursor()
+
+    # Get filename
+    startIndex = path.rindex("/") + 1
+    endIndex = path.rindex(".");
+    filename = path[startIndex:endIndex].upper()
+
 
     if request.method == 'POST':
         # Gather form info

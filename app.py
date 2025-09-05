@@ -7,7 +7,7 @@ app = Flask(__name__)
 def hello():
 
     # Initiate database
-    path = "./months/july25.db"
+    path = "./months/august25.db"
     
     con = sqlite3.connect(path)
     cur = con.cursor()
@@ -28,14 +28,14 @@ def hello():
 
         # Gather data to remove elements
         removePurchase = request.form.get('removePurchase')
-        removeTransfer = request.form.get('removeTransfer')
+        removeFood = request.form.get('removeFood')
         removeCash = request.form.get('removeCash')
 
         # Remove elements if requested
         if(removePurchase != None):
             cur.execute("DELETE FROM purchases WHERE id = ?", (removePurchase,))
-        if(removeTransfer != None):
-            cur.execute("DELETE FROM transfer WHERE id = ?", (removeTransfer,))
+        if(removeFood != None):
+            cur.execute("DELETE FROM transfer WHERE id = ?", (removeFood,))
         if(removeCash != None):
             cur.execute("DELETE FROM cash WHERE id = ?", (removeCash,))
 
@@ -44,8 +44,9 @@ def hello():
             cur.execute("INSERT INTO cash(amount) VALUES (?)", (cash,))
         elif(transactionType == "spent"):
             cur.execute("INSERT INTO purchases(day, amount, notes) VALUES (?,?,?)", [ day, amount, notes])
-        elif(transactionType == "transfer"):
-            cur.execute("INSERT INTO transfer(day, amount) VALUES (?,?)", [ day, amount])
+        elif(transactionType == "food"):
+            cur.execute("INSERT INTO transfer(day, amount, notes) VALUES (?,?,?)", [ day, amount, notes])
+            
 
         # Commit to database
         con.commit()
@@ -79,17 +80,14 @@ def hello():
     futureAverage = round(totalLeft/(31-days), 2)
     leftWith = limit - round(dailyAverage*31)
 
-# TRANSFERRED
-    # Gather sum transferred
+# FOOD
+    # Gather sum FOOD
     cur.execute("SELECT SUM(amount) FROM transfer")
     try:
-        totalTransferred = round(cur.fetchone()[0], 2)
+        totalFood = round(cur.fetchone()[0], 2)
     except:
-        totalTransferred = 0
+        totalFood = 0
 
-    # Math transferred
-    hardTotalSpent = round(forHard + totalTransferred, 2)
-    hardTotalLeft = round(limit - hardTotalSpent, 2)
  
 # CASH
     cur.execute("SELECT SUM(amount) FROM cash")
@@ -104,7 +102,7 @@ def hello():
     purchaseRows = cur.fetchall()
 
     cur.execute("SELECT * FROM transfer")
-    transferRows = cur.fetchall()
+    foodRows = cur.fetchall()
 
     cur.execute("SELECT * FROM cash")
     cashRows = cur.fetchall()[::-1]
@@ -116,16 +114,14 @@ def hello():
     return render_template('index.html', 
     filename = filename,
     totalSpent = totalSpent, 
-    totalTransferred = totalTransferred, 
+    totalFood = totalFood, 
     totalCash = totalCash, 
     totalLeft = totalLeft, 
-    hardTotalSpent = hardTotalSpent, 
-    hardTotalLeft = hardTotalLeft, 
     dailyAverage = dailyAverage, 
     futureAverage = futureAverage, 
     leftWith=  leftWith, 
     purchaseRows = purchaseRows, 
-    transferRows = transferRows, 
+    foodRows = foodRows, 
     cashRows = cashRows
     )
 

@@ -15,7 +15,7 @@
           <input type="number" name="day" placeholder="Day...">
           <select name="type" style="margin-left: 1vw">
             <option value="spent">Spent</option>
-            <option value="transfer">Transfer</option>
+            <option value="food">Food</option>
           </select>
           <input type="number" name="amount" placeholder="Amount..." step=".01" style="margin-left: 1vw" value=0>
           <input type="text" name="notes" placeholder="Notes..." style="margin-left: 1vw">
@@ -66,26 +66,28 @@
           </tbody>
         </table>
 
-      <table class="transfer">
+      <table class="food">
         <thead>
           <tr>
             <td>Day</td>
-            <td>Transferred</td>
+            <td>Food</td>
+            <td>Notes</td>
             <td>Delete</td>
           </tr>
         </thead>
         <tbody>
-          {% for row in transferRows %}
+          {% for row in foodRows %}
           <tr>
             <td>{{ row[1] }}</td>
             <td>{{ row[2] }}</td>
-            <td><form action"/" method="POST"><button class="removeButton" name="removeTransfer" value="{{ row[0] }}">X</button></form></td>
+            <td>{{ row[3] }}</td>
+            <td><form action"/" method="POST"><button class="removeButton" name="removeFood" value="{{ row[0] }}">X</button></form></td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
 
-      <table style="margin-left: 10vw; margin-right: 1vw; height: 41.5vh;">
+      <table style="margin-left: 10vw; margin-right: 1vw; height: 33.5vh;">
           <thead>
             <tr>
               <td>Calculating:</td>
@@ -118,16 +120,8 @@
               <td>-</td>
             </tr>
             <tr>
-              <td>Total Transferred</td>
-              <td>{{totalTransferred}}</td>
-            </tr>
-            <tr>
-              <td>Hard Total Spent</td>
-              <td>{{hardTotalSpent}}</td>
-            </tr>
-            <tr>
-              <td>Hard Total Left</td>
-              <td>{{hardTotalLeft}}</td>
+              <td>Total Food</td>
+              <td>{{totalFood}}</td>
             </tr>
           </tbody>
         </table>

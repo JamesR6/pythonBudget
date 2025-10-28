@@ -7,7 +7,7 @@ app = Flask(__name__)
 def hello():
 
     # Initiate database
-    path = "./months/september25.db"
+    path = "./months/y25/october25.db"
     
     con = sqlite3.connect(path)
     cur = con.cursor()
@@ -68,17 +68,7 @@ def hello():
     forHard = totalSpent
     totalLeft = round(limit - totalSpent, 2)
 
-# AVERAGES
-    # Gather days entered
-    cur.execute("SELECT COUNT(*) FROM purchases")
-    days = round(cur.fetchone()[0])
-    if(days==0): days=1
-    if(days>30): days=30
 
-    # Math averages
-    dailyAverage = round(totalSpent/days, 2)
-    futureAverage = round(totalLeft/(31-days), 2)
-    leftWith = limit - round(dailyAverage*31)
 
 # FOOD
     # Gather sum FOOD
@@ -116,10 +106,7 @@ def hello():
     totalSpent = totalSpent, 
     totalFood = totalFood, 
     totalCash = totalCash, 
-    totalLeft = totalLeft, 
-    dailyAverage = dailyAverage, 
-    futureAverage = futureAverage, 
-    leftWith=  leftWith, 
+    totalLeft = totalLeft,
     purchaseRows = purchaseRows, 
     foodRows = foodRows, 
     cashRows = cashRows

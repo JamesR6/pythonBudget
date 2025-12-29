@@ -7,15 +7,17 @@ app = Flask(__name__)
 def hello():
 
     # Initiate database
-    path = "./months/y25/november25.db"
+    path = "./months/y25/december.db"
     
     con = sqlite3.connect(path)
     cur = con.cursor()
 
     # Get filename
     startIndex = path.rindex("/") + 1
-    endIndex = path.rindex(".");
-    filename = path[startIndex:endIndex].upper()
+    endIndex = path.rindex(".")
+    yearStartIndex = path.rindex("/") - 2
+    yearEndIndex = path.rindex("/")
+    filename = path[startIndex:endIndex].upper() + " 20" + path[yearStartIndex:yearEndIndex]
 
 
     if request.method == 'POST':

@@ -7,7 +7,7 @@ app = Flask(__name__)
 def hello():
 
     # Initiate database
-    path = "./months/y26/april.db"
+    path = "./months/y26/may.db"
     
     con = sqlite3.connect(path)
     cur = con.cursor()

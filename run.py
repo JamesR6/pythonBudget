@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request
-import sqlite3;
-app = Flask(__name__)
+import sqlite3
+
+from app import create_app
+app = create_app()
 
 @app.route('/', methods=['GET', 'POST'])
-def hello():
+def dashboard():
 
     # Initiate database
     path = "./months/y26/august.db"

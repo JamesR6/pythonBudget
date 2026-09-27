@@ -3,7 +3,7 @@ import sqlite3
 # Path to the active month's database.
 # Later you could make this dynamic (e.g. based on today's date or a URL param)
 # instead of hardcoding it here.
-DB_PATH = "./instance/months/y26/august.db"
+DB_PATH = "./instance/months/y26/september.db"
 
 
 def get_connection(path=DB_PATH):

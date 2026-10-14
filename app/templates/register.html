@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <title>Create account | Budget Tracker</title>
+  </head>
+  <body>
+    <section class="panel login-panel">
+      <h1>Create account</h1>
+
+      {% for category, message in get_flashed_messages(with_categories=true) %}
+        <p class="message {{ category }}">{{ message }}</p>
+      {% endfor %}
+
+      <form method="POST" class="login-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="username" required>
+        <label for="password">Password (at least 12 characters)</label>
+        <input id="password" name="password" type="password" autocomplete="new-password" required>
+        <label for="confirm_password">Confirm password</label>
+        <input id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required>
+        <button type="submit" class="btn">Create account</button>
+      </form>
+      <p>Already registered? <a href="{{ url_for('main.login') }}">Log in</a></p>
+    </section>
+  </body>
+</html>

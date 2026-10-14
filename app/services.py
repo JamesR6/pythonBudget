@@ -30,7 +30,7 @@ def get_display_range(start, end):
     return f"{start} to {end}"
 
 
-def handle_form_submission(cur, con, form):
+def handle_form_submission(cur, con, form, user_id):
     """Apply whatever add/remove action the submitted form represents."""
     day = _valid_date(form.get('day')) or date.today().isoformat()
     transactionType = form.get('type')
@@ -44,23 +44,23 @@ def handle_form_submission(cur, con, form):
 
     for removed in (removePurchase, removeFood, removeCash):
         if removed is not None:
-            db.delete_txn(cur, removed)
+            db.delete_txn(cur, removed, user_id)
 
     if cash is not None:
-        db.insert_txn(cur, db.CASH, day, cash, None)
+        db.insert_txn(cur, db.CASH, day, cash, None, user_id)
     elif transactionType == "spent":
-        db.insert_txn(cur, db.GENERAL, day, amount, notes)
+        db.insert_txn(cur, db.GENERAL, day, amount, notes, user_id)
     elif transactionType == "food":
-        db.insert_txn(cur, db.SPECIFIC, day, amount, notes)
+        db.insert_txn(cur, db.SPECIFIC, day, amount, notes, user_id)
 
     con.commit()
 
 
-def get_dashboard_data(cur, start, end):
+def get_dashboard_data(cur, start, end, user_id):
     """Gather every total + table needed to render the dashboard."""
-    totalSpent = db.get_sum(cur, db.GENERAL, start, end)
-    totalFood = db.get_sum(cur, db.SPECIFIC, start, end)
-    totalCash = db.get_sum(cur, db.CASH, start, end)
+    totalSpent = db.get_sum(cur, db.GENERAL, start, end, user_id)
+    totalFood = db.get_sum(cur, db.SPECIFIC, start, end, user_id)
+    totalCash = db.get_sum(cur, db.CASH, start, end, user_id)
     totalLeft = round(MONTHLY_LIMIT - totalSpent, 2)
 
     return {
@@ -68,7 +68,7 @@ def get_dashboard_data(cur, start, end):
         "totalFood": totalFood,
         "totalCash": totalCash,
         "totalLeft": totalLeft,
-        "purchaseRows": db.get_rows(cur, db.GENERAL, start, end),
-        "foodRows": db.get_rows(cur, db.SPECIFIC, start, end),
-        "cashRows": db.get_rows(cur, db.CASH, reverse=True),
+        "purchaseRows": db.get_rows(cur, db.GENERAL, user_id, start, end),
+        "foodRows": db.get_rows(cur, db.SPECIFIC, user_id, start, end),
+        "cashRows": db.get_rows(cur, db.CASH, user_id, reverse=True),
     }

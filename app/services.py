@@ -1,23 +1,38 @@
+from datetime import date, datetime, timedelta
+
 from . import database as db
 
 MONTHLY_LIMIT = 1000
 
 
-def get_display_filename(path):
-    """Turn './instance/months/y26/august.db' into 'AUGUST 2026'."""
-    startIndex = path.rindex("/") + 1
-    endIndex = path.rindex(".")
-    yearStartIndex = path.rindex("/", 0, path.rindex("/")) + 1
-    yearEndIndex = path.rindex("/")
+def get_date_range(args):
+    """Read start/end (YYYY-MM-DD) from the query string; default to this month."""
+    today = date.today()
+    first = today.replace(day=1)
+    next_month = (first + timedelta(days=32)).replace(day=1)
+    last = next_month - timedelta(days=1)
 
-    month_part = path[startIndex:endIndex].upper()
-    year_part = "20" + path[yearStartIndex:yearEndIndex]
-    return f"{month_part} {year_part}"
+    start = _valid_date(args.get('start')) or first.isoformat()
+    end = _valid_date(args.get('end')) or last.isoformat()
+    if start > end:
+        start, end = end, start
+    return start, end
+
+
+def _valid_date(value):
+    try:
+        return datetime.strptime(value, "%Y-%m-%d").date().isoformat()
+    except (TypeError, ValueError):
+        return None
+
+
+def get_display_range(start, end):
+    return f"{start} to {end}"
 
 
 def handle_form_submission(cur, con, form):
     """Apply whatever add/remove action the submitted form represents."""
-    day = form.get('day')
+    day = _valid_date(form.get('day')) or date.today().isoformat()
     transactionType = form.get('type')
     amount = form.get('amount')
     notes = form.get('notes')
@@ -27,40 +42,33 @@ def handle_form_submission(cur, con, form):
     removeFood = form.get('removeFood')
     removeCash = form.get('removeCash')
 
-    if removePurchase is not None:
-        db.delete_purchase(cur, removePurchase)
-    if removeFood is not None:
-        db.delete_food(cur, removeFood)
-    if removeCash is not None:
-        db.delete_cash(cur, removeCash)
+    for removed in (removePurchase, removeFood, removeCash):
+        if removed is not None:
+            db.delete_txn(cur, removed)
 
     if cash is not None:
-        db.insert_cash(cur, cash)
+        db.insert_txn(cur, db.CASH, day, cash, None)
     elif transactionType == "spent":
-        db.insert_purchase(cur, day, amount, notes)
+        db.insert_txn(cur, db.GENERAL, day, amount, notes)
     elif transactionType == "food":
-        db.insert_food(cur, day, amount, notes)
+        db.insert_txn(cur, db.SPECIFIC, day, amount, notes)
 
     con.commit()
 
 
-def get_dashboard_data(cur):
+def get_dashboard_data(cur, start, end):
     """Gather every total + table needed to render the dashboard."""
-    totalSpent = db.get_sum(cur, "purchases")
-    totalFood = db.get_sum(cur, "transfer")
-    totalCash = db.get_sum(cur, "cash")
+    totalSpent = db.get_sum(cur, db.GENERAL, start, end)
+    totalFood = db.get_sum(cur, db.SPECIFIC, start, end)
+    totalCash = db.get_sum(cur, db.CASH, start, end)
     totalLeft = round(MONTHLY_LIMIT - totalSpent, 2)
-
-    purchaseRows = db.get_all_rows(cur, "purchases")
-    foodRows = db.get_all_rows(cur, "transfer")
-    cashRows = db.get_all_rows(cur, "cash", reverse=True)
 
     return {
         "totalSpent": totalSpent,
         "totalFood": totalFood,
         "totalCash": totalCash,
         "totalLeft": totalLeft,
-        "purchaseRows": purchaseRows,
-        "foodRows": foodRows,
-        "cashRows": cashRows,
+        "purchaseRows": db.get_rows(cur, db.GENERAL, start, end),
+        "foodRows": db.get_rows(cur, db.SPECIFIC, start, end),
+        "cashRows": db.get_rows(cur, db.CASH, start, end, reverse=True),
     }

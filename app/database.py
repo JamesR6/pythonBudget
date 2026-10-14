@@ -1,13 +1,18 @@
 import sqlite3
+from pathlib import Path
 
-# Path to the active month's database.
-# Later you could make this dynamic (e.g. based on today's date or a URL param)
-# instead of hardcoding it here.
-DB_PATH = "./instance/months/y25/august.db"
+DB_PATH = Path(__file__).resolve().parent.parent / "instance" / "finance.db"
+
+# No auth yet; every query is scoped to this user.
+DEFAULT_USER_ID = 1
+
+GENERAL = "General_txn"    # shown as "Purchases" in the UI
+SPECIFIC = "Specific_txn"  # shown as "Food" in the UI
+CASH = "cash"
 
 
 def get_connection(path=DB_PATH):
-    """Open a connection + cursor to the given db file."""
+    """Open a connection + cursor to the finance database."""
     con = sqlite3.connect(path)
     cur = con.cursor()
     return con, cur
@@ -17,49 +22,51 @@ def close_connection(con):
     con.close()
 
 
+def _dollars(cents):
+    return round(cents / 100, 2)
+
+
+def _cents(amount):
+    return round(float(amount or 0) * 100)
+
+
 # ---- Deletes ----
 
-def delete_purchase(cur, id):
-    cur.execute("DELETE FROM purchases WHERE id = ?", (id,))
-
-
-def delete_food(cur, id):
-    cur.execute("DELETE FROM transfer WHERE id = ?", (id,))
-
-
-def delete_cash(cur, id):
-    cur.execute("DELETE FROM cash WHERE id = ?", (id,))
+def delete_txn(cur, id, user_id=DEFAULT_USER_ID):
+    cur.execute(
+        "DELETE FROM transactions WHERE id = ? AND user_id = ?", (id, user_id)
+    )
 
 
 # ---- Inserts ----
 
-def insert_purchase(cur, day, amount, notes):
+def insert_txn(cur, kind, txn_date, amount, notes, user_id=DEFAULT_USER_ID):
     cur.execute(
-        "INSERT INTO purchases(day, amount, notes) VALUES (?,?,?)",
-        (day, amount, notes),
+        "INSERT INTO transactions(user_id, kind, txn_date, amount_cents, notes) "
+        "VALUES (?,?,?,?,?)",
+        (user_id, kind, txn_date, _cents(amount), notes),
     )
-
-
-def insert_food(cur, day, amount, notes):
-    cur.execute(
-        "INSERT INTO transfer(day, amount, notes) VALUES (?,?,?)",
-        (day, amount, notes),
-    )
-
-
-def insert_cash(cur, amount):
-    cur.execute("INSERT INTO cash(amount) VALUES (?)", (amount,))
 
 
 # ---- Reads ----
 
-def get_sum(cur, table):
-    cur.execute(f"SELECT SUM(amount) FROM {table}")
+def get_sum(cur, kind, start, end, user_id=DEFAULT_USER_ID):
+    cur.execute(
+        "SELECT SUM(amount_cents) FROM transactions "
+        "WHERE user_id = ? AND kind = ? AND txn_date BETWEEN ? AND ?",
+        (user_id, kind, start, end),
+    )
     result = cur.fetchone()[0]
-    return round(result, 2) if result is not None else 0
+    return _dollars(result) if result is not None else 0
 
 
-def get_all_rows(cur, table, reverse=False):
-    cur.execute(f"SELECT * FROM {table}")
-    rows = cur.fetchall()
+def get_rows(cur, kind, start, end, reverse=False, user_id=DEFAULT_USER_ID):
+    """Return (id, txn_date, amount_in_dollars, notes) rows in the date range."""
+    cur.execute(
+        "SELECT id, txn_date, amount_cents, notes FROM transactions "
+        "WHERE user_id = ? AND kind = ? AND txn_date BETWEEN ? AND ? "
+        "ORDER BY txn_date, id",
+        (user_id, kind, start, end),
+    )
+    rows = [(r[0], r[1], _dollars(r[2]), r[3] or "") for r in cur.fetchall()]
     return rows[::-1] if reverse else rows

@@ -1,10 +1,11 @@
 /* ---------- THEME: change colors, radii, and spacing here ---------- */
 :root {
-    --page-bg: #000000;
-    --panel-bg: #0d0524;
-    --accent: #4c1dc8;
-    --accent-faint: #4b1dc84d;   /* odd table rows */
-    --highlight: #b3e237;        /* table header text */
+    --page-bg: #3A2E24;
+    --panel-bg: #8C6B4F;
+    --accent: #D2B48C;
+    --off-black: #080504;
+    --accent-faint: #3A2E244d;   /* odd table rows */
+    --highlight: #000000;        /* table header text */
     --text: #cccccc;
 
     --radius-lg: 20px;           /* panels */
@@ -54,7 +55,7 @@ table {
     overflow-y: auto;
     text-wrap: wrap;
     margin: 2vh 0 1vh .8vw;
-    background-color: #000000;
+    background-color: var(--off-black);
     border: var(--border-width) solid var(--accent);
     border-radius: var(--radius-md);
     border-spacing: 0;
@@ -95,18 +96,19 @@ tr:nth-child(odd) {
 /* ---------- FORMS & CONTROLS ---------- */
 input[type=text],
 input[type=number],
+input[type=date],
 select,
 .btn {
     border: var(--border-width) solid var(--accent);
     border-radius: var(--radius-md);
-    background-color: #000000;
+    background-color: var(--off-black);
     color: var(--text);
 }
 
 .remove-btn {
     border: 2px solid var(--accent);
     border-radius: var(--radius-sm);
-    background-color: #000000;
+    background-color: var(--off-black);
     color: white;
 }
 

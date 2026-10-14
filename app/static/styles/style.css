@@ -1,61 +1,72 @@
-/* The entire page */
-html{
+/* ---------- THEME: change colors, radii, and spacing here ---------- */
+:root {
+    --page-bg: #000000;
+    --panel-bg: #0d0524;
+    --accent: #4c1dc8;
+    --accent-faint: #4b1dc84d;   /* odd table rows */
+    --highlight: #b3e237;        /* table header text */
+    --text: #cccccc;
+
+    --radius-lg: 20px;           /* panels */
+    --radius-md: 10px;           /* tables, inputs */
+    --radius-sm: 5px;            /* small buttons */
+    --border-width: 3px;
+}
+
+
+/* ---------- BASE ---------- */
+html {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Entire page background */
-body{
-    background-color: #000000;
+body {
+    background-color: var(--page-bg);
 }
 
-/* Upper Section */
-.header {
-    background: #0d0524;
-    border-color: #4c1dc8;
-    height: 11vh;
-    border-radius: 20px;
-    border-style: solid;
+::-webkit-scrollbar {
+    width: 0;
+}
+
+
+/* ---------- PANELS (the two big sections) ---------- */
+.panel {
+    background: var(--panel-bg);
+    border: var(--border-width) solid var(--accent);
+    border-radius: var(--radius-lg);
     display: flex;
-    color: #cccccc;
 }
 
-/* Lower Section */
-.body {
-    background: #0d0524;
-    border-color: #4c1dc8;
+.header {
+    height: 11vh;
+    color: var(--text);
+}
+
+.main {
+    height: 83vh;
     margin-top: .5%;
     padding: .3%;
-    height: 83vh;
-    border-radius: 20px;
-    border-style: solid;
-    display: flex;
 }
 
 
-
-
-/* ---------TABLES--------- */ 
-
+/* ---------- TABLES (every table gets this look) ---------- */
 table {
-    margin-left: .8vw;
-    margin-top: 2vh;
-    margin-bottom: 1vh;
-    background-color: rgb(0, 0, 0);
-    border-radius: 10px;
-    border-spacing: 0;
-    border: 3px solid #4c1dc8;
-    display:block;
+    display: block;
     overflow-y: auto;
-    text-wrap:wrap;
+    text-wrap: wrap;
+    margin: 2vh 0 1vh .8vw;
+    background-color: #000000;
+    border: var(--border-width) solid var(--accent);
+    border-radius: var(--radius-md);
+    border-spacing: 0;
 }
 
-thead{
-    background-color: #4c1dc8;
-    color: #b3e237;
+thead {
+    background-color: var(--accent);
+    color: var(--highlight);
 }
 
-tbody{
-    color: #cccccc;
+tbody {
+    color: var(--text);
 }
 
 td, th {
@@ -64,51 +75,62 @@ td, th {
 }
 
 tr:nth-child(odd) {
-    background-color: #4b1dc84d;
+    background-color: var(--accent-faint);
 }
 
-::-webkit-scrollbar{
-    width: 0;
-}
-
-/* Cash table */
-.dtable{
+/* Table-specific overrides (only what differs from the base look) */
+.cash-table {
     height: 9vh;
-    margin-left: 2vw;
-    margin-top: 1vh;
+    margin: 1vh 0 1vh 2vw;
     border-collapse: separate;
 }
 
-
-
-
-
-/* -------FORM-------- */
-
-.inputForm{
-    display: flex;
-    margin-top: 2.6vh;
-    margin-bottom: 2.6vh;
-    margin-left: 2vw;
+.stats-table {
+    height: 180px;
+    margin-left: 10vw;
+    margin-right: 1vw;
 }
 
-input[type=text], input[type=number], .Submit, select, .cashSubmit {
-    border: 3px solid #4c1dc8;
-    border-radius: 10px;
-    background-color: black;
-    color: #cccccc;
+
+/* ---------- FORMS & CONTROLS ---------- */
+input[type=text],
+input[type=number],
+select,
+.btn {
+    border: var(--border-width) solid var(--accent);
+    border-radius: var(--radius-md);
+    background-color: #000000;
+    color: var(--text);
 }
 
-.removeButton{
-    border: 2px solid #4c1dc8;
-    border-radius: 5px;
-    background-color: black;
+.remove-btn {
+    border: 2px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background-color: #000000;
     color: white;
 }
 
+/* Add-entry form: every control after the first is spaced 1vw apart */
+.entry-form {
+    display: flex;
+    margin: 2.6vh 0 2.6vh 2vw;
+}
+.entry-form > * + * {
+    margin-left: 1vw;
+}
 
+/* Cash form + total */
+.cash-form {
+    margin: 4vh 0 0 15vw;
+}
+.cash-form input {
+    width: 5vw;
+}
+.cash-total {
+    margin: 4vh 0 0 2vw;
+}
 
-
-
-
-
+/* Date range form */
+.date-range {
+    margin: 2.5vw;
+}

@@ -60,13 +60,23 @@ def get_sum(cur, kind, start, end, user_id=DEFAULT_USER_ID):
     return _dollars(result) if result is not None else 0
 
 
-def get_rows(cur, kind, start, end, reverse=False, user_id=DEFAULT_USER_ID):
-    """Return (id, txn_date, amount_in_dollars, notes) rows in the date range."""
-    cur.execute(
+def get_rows(cur, kind, start=None, end=None, reverse=False, user_id=DEFAULT_USER_ID):
+    """Return (id, txn_date, amount_in_dollars, notes) rows, optionally limited to a date range."""
+    query = (
         "SELECT id, txn_date, amount_cents, notes FROM transactions "
-        "WHERE user_id = ? AND kind = ? AND txn_date BETWEEN ? AND ? "
-        "ORDER BY txn_date, id",
-        (user_id, kind, start, end),
+        "WHERE user_id = ? AND kind = ?"
     )
+    params = [user_id, kind]
+
+    if start is not None:
+        query += " AND txn_date >= ?"
+        params.append(start)
+    if end is not None:
+        query += " AND txn_date <= ?"
+        params.append(end)
+
+    query += " ORDER BY txn_date, id"
+    cur.execute(query, params)
+
     rows = [(r[0], r[1], _dollars(r[2]), r[3] or "") for r in cur.fetchall()]
     return rows[::-1] if reverse else rows

@@ -70,5 +70,5 @@ def get_dashboard_data(cur, start, end):
         "totalLeft": totalLeft,
         "purchaseRows": db.get_rows(cur, db.GENERAL, start, end),
         "foodRows": db.get_rows(cur, db.SPECIFIC, start, end),
-        "cashRows": db.get_rows(cur, db.CASH, start, end, reverse=True),
+        "cashRows": db.get_rows(cur, db.CASH, reverse=True),
     }

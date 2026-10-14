@@ -34,7 +34,7 @@
       <table class="cash-table">
         {% for row in cashRows %}
           <tr>
-            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
             <td><form method="POST"><button class="remove-btn" name="removeCash" value="{{ row[0] }}">X</button></form></td>
           </tr>
         {% endfor %}

@@ -12,7 +12,7 @@
 
         <!-- INPUT FORM -->
         <form method="POST" class="inputForm">
-          <input type="number" name="day" placeholder="Day...">
+          <input type="date" name="day" value="{{ end }}">
           <select name="type" style="margin-left: 1vw">
             <option value="spent">Spent</option>
             <option value="food">Food</option>
@@ -39,7 +39,13 @@
           {% endfor %}
         </table>
 
-        <p style="margin: 2.5vw">{{filename}}</p>
+        <!-- DATE RANGE -->
+        <form method="GET" style="margin: 2.5vw">
+          <input type="date" name="start" value="{{ start }}">
+          <input type="date" name="end" value="{{ end }}">
+          <button type="submit">Show</button>
+          <p>{{ filename }}</p>
+        </form>
     </section>
 
 

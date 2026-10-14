@@ -3,16 +3,15 @@ from pathlib import Path
 
 DB_PATH = Path(__file__).resolve().parent.parent / "instance" / "finance.db"
 
-# No auth yet; every query is scoped to this user.
-DEFAULT_USER_ID = 1
-
 GENERAL = "General_txn"    # shown as "Purchases" in the UI
 SPECIFIC = "Specific_txn"  # shown as "Food" in the UI
 CASH = "cash"
 
 
-def get_connection(path=DB_PATH):
+def get_connection(path=None):
     """Open a connection + cursor to the finance database."""
+    if path is None:
+        path = DB_PATH
     con = sqlite3.connect(path)
     cur = con.cursor()
     return con, cur
@@ -30,9 +29,34 @@ def _cents(amount):
     return round(float(amount or 0) * 100)
 
 
+def get_user_by_email(cur, email):
+    cur.execute(
+        "SELECT id, email, password_hash FROM users WHERE email = ?", (email,)
+    )
+    return cur.fetchone()
+
+
+def create_user(cur, email, password_hash):
+    cur.execute(
+        "INSERT INTO users(email, password_hash) VALUES (?, ?)",
+        (email, password_hash),
+    )
+    return cur.lastrowid
+
+
+def initialize_legacy_user(cur, email, password_hash):
+    """Set credentials for user 1 only while its password is still the placeholder."""
+    cur.execute(
+        "UPDATE users SET email = ?, password_hash = ? "
+        "WHERE id = 1 AND password_hash = 'placeholder'",
+        (email, password_hash),
+    )
+    return cur.rowcount == 1
+
+
 # ---- Deletes ----
 
-def delete_txn(cur, id, user_id=DEFAULT_USER_ID):
+def delete_txn(cur, id, user_id):
     cur.execute(
         "DELETE FROM transactions WHERE id = ? AND user_id = ?", (id, user_id)
     )
@@ -40,7 +64,7 @@ def delete_txn(cur, id, user_id=DEFAULT_USER_ID):
 
 # ---- Inserts ----
 
-def insert_txn(cur, kind, txn_date, amount, notes, user_id=DEFAULT_USER_ID):
+def insert_txn(cur, kind, txn_date, amount, notes, user_id):
     cur.execute(
         "INSERT INTO transactions(user_id, kind, txn_date, amount_cents, notes) "
         "VALUES (?,?,?,?,?)",
@@ -50,7 +74,7 @@ def insert_txn(cur, kind, txn_date, amount, notes, user_id=DEFAULT_USER_ID):
 
 # ---- Reads ----
 
-def get_sum(cur, kind, start, end, user_id=DEFAULT_USER_ID):
+def get_sum(cur, kind, start, end, user_id):
     cur.execute(
         "SELECT SUM(amount_cents) FROM transactions "
         "WHERE user_id = ? AND kind = ? AND txn_date BETWEEN ? AND ?",
@@ -60,7 +84,7 @@ def get_sum(cur, kind, start, end, user_id=DEFAULT_USER_ID):
     return _dollars(result) if result is not None else 0
 
 
-def get_rows(cur, kind, start=None, end=None, reverse=False, user_id=DEFAULT_USER_ID):
+def get_rows(cur, kind, user_id, start=None, end=None, reverse=False):
     """Return (id, txn_date, amount_in_dollars, notes) rows, optionally limited to a date range."""
     query = (
         "SELECT id, txn_date, amount_cents, notes FROM transactions "

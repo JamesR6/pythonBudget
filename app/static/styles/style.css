@@ -97,6 +97,8 @@ tr:nth-child(odd) {
 input[type=text],
 input[type=number],
 input[type=date],
+input[type=email],
+input[type=password],
 select,
 .btn {
     border: var(--border-width) solid var(--accent);
@@ -135,4 +137,30 @@ select,
 /* Date range form */
 .date-range {
     margin: 2.5vw;
+}
+
+.login-panel {
+    width: min(360px, 90vw);
+    margin: 12vh auto;
+    padding: 24px;
+    color: var(--text);
+    flex-direction: column;
+}
+
+.login-form {
+    display: grid;
+    gap: 12px;
+}
+
+.login-form input {
+    padding: 8px;
+}
+
+.login-form .btn {
+    padding: 8px;
+}
+
+.message {
+    color: var(--text);
+    margin: 12px;
 }

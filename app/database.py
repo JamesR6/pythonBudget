@@ -75,11 +75,20 @@ def insert_txn(cur, kind, txn_date, amount, notes, user_id):
 # ---- Reads ----
 
 def get_sum(cur, kind, start, end, user_id):
-    cur.execute(
-        "SELECT SUM(amount_cents) FROM transactions "
-        "WHERE user_id = ? AND kind = ? AND txn_date BETWEEN ? AND ?",
-        (user_id, kind, start, end),
-    )
+
+    if (start != None and end != None):
+        cur.execute(
+            "SELECT SUM(amount_cents) FROM transactions "
+            "WHERE user_id = ? AND kind = ? AND txn_date BETWEEN ? AND ?",
+            (user_id, kind, start, end),
+        )
+    else:
+        cur.execute(
+            "SELECT SUM(amount_cents) FROM transactions "
+            "WHERE user_id = ? AND kind = ?",
+            (user_id, kind),
+        )
+
     result = cur.fetchone()[0]
     return _dollars(result) if result is not None else 0
 

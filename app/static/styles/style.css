@@ -82,6 +82,7 @@ tr:nth-child(odd) {
 /* Table-specific overrides (only what differs from the base look) */
 .cash-table {
     height: 9vh;
+    width: 15vw;
     margin: 1vh 0 1vh 2vw;
     border-collapse: separate;
 }

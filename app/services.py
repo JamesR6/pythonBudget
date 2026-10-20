@@ -60,7 +60,7 @@ def get_dashboard_data(cur, start, end, user_id):
     """Gather every total + table needed to render the dashboard."""
     totalSpent = db.get_sum(cur, db.GENERAL, start, end, user_id)
     totalFood = db.get_sum(cur, db.SPECIFIC, start, end, user_id)
-    totalCash = db.get_sum(cur, db.CASH, start, end, user_id)
+    totalCash = db.get_sum(cur, db.CASH, None, None, user_id)
     totalLeft = round(MONTHLY_LIMIT - totalSpent, 2)
 
     return {
